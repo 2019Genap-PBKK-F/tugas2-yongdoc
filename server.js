@@ -65,6 +65,7 @@ app.get("/",function(req, res){
 
 //GET API
 app.get("/api/mahasiswa", function(req, res){
+  var query = "select MHS_NRP, MHS_NAMA, MHS_JK, date, MHS_UKT, MHS_AKTIF, MHS_FOTO from mahasiswa as i where date = (select MHS_TL from mahasiswa as j where i.MHS_TL = j.MHS_TL)";
   executeQuery (res, query, null, 0);
 });
 
