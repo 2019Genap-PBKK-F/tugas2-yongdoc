@@ -3,8 +3,8 @@ const http = require("http");
 var app = express(),
     sql = require("mssql"),
     bodyParser = require('body-parser');
-// const hostname = '10.199.14.46';
-const hostname = '127.0.0.1';
+ const hostname = '10.199.14.46';
+//const hostname = '127.0.0.1';
 const port = 8023;
 
 
