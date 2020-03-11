@@ -63,7 +63,7 @@ app.get("/",function(req, res){
 });
 
 
-//GET API
+//GET API LAGI
 app.get("/api/mahasiswa", function(req, res){
   var query = "select * from mahasiswa";
   executeQuery (res, query, null, 0);
