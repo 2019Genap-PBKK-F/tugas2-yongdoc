@@ -3,7 +3,7 @@ const http = require("http");
 var app = express(),
     sql = require("mssql"),
     bodyParser = require('body-parser');
- const hostname = '10.199.14.46';
+const hostname = '10.199.14.46';
 //const hostname = '127.0.0.1';
 const port = 8023;
 
@@ -65,7 +65,6 @@ app.get("/",function(req, res){
 
 //GET API
 app.get("/api/mahasiswa", function(req, res){
-  var query = "select * from mahasiswa";
   executeQuery (res, query, null, 0);
 });
 
