@@ -338,6 +338,23 @@ app.delete("/api/indikatorperiode/:id", function(req, res)
   executeQuery(res, query, null, 0);
 });
 
+//GET API indikatorsatker
+app.get("/api/indikatorsatker/:id_sk", function(req, res){
+  var column = [
+    { name: 'id_sk', sqltype: sql.UniqueIdentifier, value: req.params.id_sk}
+  ]
+  var query = "select isk.id as num, a.aspek as Aspek, a.komponen_aspek as Komponen, mi.nama as Indikator, isk.bobot as Bobot, isk.target as Target, isk.capaian as Capaian from indikator_satuankerja as isk, masterindikator as mi, aspek as a where a.id = mi.id_aspek and mi.id = isk.id_master and isk.id_satker = @id_sk";
+  
+  executeQuery (res, query, column, 1);
+});
+
+//GET API satuankerja
+app.get('/api/dropdownkonkin/', function(req,res){
+  
+  var query = "select id_sk, nama from satuankerja where nama like 'Departemen%' or nama like 'Fakultas%'";
+  executeQuery (res, query, null, 0);
+});
+
 //GET API abmas
 app.get("/api/abmas/", function(req, res){
   var query = "select * from abmas";
@@ -360,6 +377,16 @@ app.get("/api/penelitian/", function(req, res){
 app.get("/api/publikasi/", function(req, res){
   var query = "select * from publikasi";
   executeQuery (res, query, null, 0);
+});
+
+//POST API for login
+app.post("/api/login/", function(req, res){
+  var column = [
+    { name: 'email', sqltype: sql.VarChar, value: req.body.username},
+    { name: 'password', sqltype: sql.VarChar, value: req.body.password}
+  ]
+  var query = "select id_sk, nama from satuankerja where email = @email and @email = @password";
+  executeQuery (res, query, column, 1);
 });
 
 app.listen(port, hostname, function() {
