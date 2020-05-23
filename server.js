@@ -3,8 +3,8 @@ const http = require("http");
 var app = express(),
     sql = require("mssql"),
     bodyParser = require('body-parser');
-// const hostname = '10.199.14.46';
-const hostname = '127.0.0.1';
+const hostname = '10.199.14.46';
+// const hostname = '127.0.0.1';
 const port = 8023;
 
 
@@ -95,6 +95,40 @@ app.put("/api/datadasar/:id", function(req, res){
 app.delete("/api/datadasar/:id", function(req, res)
 {
   var query = "delete from datadasar where id=" + req.params.id;
+  executeQuery(res, query, null, 0);
+});
+
+//GET API capaianunit
+app.get("/api/capaianunit/", function(req, res){
+  var query = "select id, id_datadasar, id_satker, capaian, create_date from capaian_unit";
+  executeQuery (res, query, null, 0);
+});
+
+//POST API capaianunit
+app.post("/api/capaianunit/", function(req, res){
+
+  var query = "insert into capaian_unit ( create_date ) values ( current_timestamp )";
+  executeQuery(res, query, null, 0);
+});
+
+//PUT API capaianunit
+app.put("/api/capaianunit/:id", function(req, res){
+  console.log(req.body)
+  var column = [
+    { name: 'id', sqltype: sql.Int, value: req.body.id },
+    { name: 'capaian', sqltype: sql.Float, value: req.body.capaian },
+    { name: 'id_datadasar', sqltype: sql.Int, value: req.body.id_datadasar },
+    { name: 'id_satker', sqltype: sql.UniqueIdentifier, value: req.body.id_satker }
+  ]
+
+  var query = "update capaian_unit set capaian = @capaian, id_datadasar = @id_datadasar, id_satker = @id_satker where id = @id";
+  executeQuery(res,query,column,1);
+});
+
+//DELETE API capaianunit
+app.delete("/api/capaianunit/:id", function(req, res)
+{
+  var query = "delete from capaian_unit where id=" + req.params.id;
   executeQuery(res, query, null, 0);
 });
 
@@ -348,11 +382,13 @@ app.get("/api/indikatorsatker/:id_sk", function(req, res){
   executeQuery (res, query, column, 1);
 });
 
-//GET API satuankerja
-app.get('/api/dropdownkonkin/', function(req,res){
-  
-  var query = "select id_sk, nama from satuankerja where nama like 'Departemen%' or nama like 'Fakultas%'";
-  executeQuery (res, query, null, 0);
+//GET API dropdown satuankerja
+app.get('/api/dropdownkonkin/:id', function(req,res){  
+  var column = [
+    { name: 'id_satker', sqltype: sql.UniqueIdentifier, value: req.params.id}
+  ]
+  var query = "select id_sk, nama from satuankerja where (id_sk = @id_satker or id_induk_satker = @id_satker) and (nama like 'Departemen%' or nama like 'Fakultas%') order by id";
+  executeQuery (res, query, column, 1);
 });
 
 //GET API abmas
