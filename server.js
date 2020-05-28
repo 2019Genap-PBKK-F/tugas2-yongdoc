@@ -1,11 +1,16 @@
 const express = require("express");
-const http = require("http");
+const https = require("https");
 var app = express(),
     sql = require("mssql"),
     bodyParser = require('body-parser');
 const hostname = '10.199.14.46';
 // const hostname = '127.0.0.1';
 const port = 8023;
+
+const options = {
+  key: fs.readFileSync(__dirname+'/72511966_yongdoc.github.io.key', 'utf8'),
+  cert: fs.readFileSync(__dirname+'/72511966_yongdoc.github.io.cert', 'utf8')
+};
 
 
 
@@ -377,7 +382,7 @@ app.get("/api/indikatorsatker/:id_sk", function(req, res){
   var column = [
     { name: 'id_sk', sqltype: sql.UniqueIdentifier, value: req.params.id_sk}
   ]
-  var query = "select isk.id as num, a.aspek as Aspek, a.komponen_aspek as Komponen, mi.nama as Indikator, isk.bobot as Bobot, isk.target as Target, isk.capaian as Capaian from indikator_satuankerja as isk, masterindikator as mi, aspek as a where a.id = mi.id_aspek and mi.id = isk.id_master and ( isk.id_satker = @id_sk or isk.id_satker = (select id_sk from satuankerja where @id_sk = id_induk_satker))";
+  var query = "select isk.id as num, a.aspek as Aspek, a.komponen_aspek as Komponen, mi.nama as Indikator, isk.bobot as Bobot, isk.target as Target, isk.capaian as Capaian from indikator_satuankerja as isk, masterindikator as mi, aspek as a where a.id = mi.id_aspek and mi.id = isk.id_master and isk.id_satker = @id_sk";
   
   executeQuery (res, query, column, 1);
 });
@@ -425,8 +430,12 @@ app.post("/api/login/", function(req, res){
   executeQuery (res, query, column, 1);
 });
 
-app.listen(port, hostname, function() {
-  var message = "Server running on Port: " + port;
-  console.log(message);
-})
+// app.listen(port, hostname, function() {
+//   var message = "Server running on Port: " + port;
+//   console.log(message);
+// })
 
+https.createServer(options, app)
+.listen(port, hostname, function () {
+  console.log('Go to https://'+hostname+':'+port+'/')
+})
