@@ -2,7 +2,8 @@ const express = require("express");
 const https = require("https");
 var app = express(),
     sql = require("mssql"),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    cors = require("cors");
 const hostname = '10.199.14.46';
 // const hostname = '127.0.0.1';
 const port = 8023;
@@ -15,16 +16,11 @@ const options = {
 
 
 //CORS Middleware
-app.use(function (req, res, next) {
-  //Enabling CORS
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "POST,GET,PUT,DELETE");
-  res.header("Access-Control-Allow-Headers", "*");
-  next();
-});
+app.use(cors())
+
 
 // Body Parser Middleware
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 var dbConfig = {
