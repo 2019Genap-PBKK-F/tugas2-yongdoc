@@ -10,8 +10,8 @@ const hostname = '10.199.14.46';
 const port = 8023;
 
 const options = {
-  key: fs.readFileSync(__dirname+'/72511966_yongdoc.github.io.key', 'utf8'),
-  cert: fs.readFileSync(__dirname+'/72511966_yongdoc.github.io.cert', 'utf8')
+  key: fs.readFileSync(__dirname+'/yongdoc.github.io.key', 'utf8'),
+  cert: fs.readFileSync(__dirname+'/yongdoc.github.io.cert', 'utf8')
 };
 
 
