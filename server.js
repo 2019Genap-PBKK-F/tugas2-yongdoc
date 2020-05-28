@@ -377,7 +377,7 @@ app.get("/api/indikatorsatker/:id_sk", function(req, res){
   var column = [
     { name: 'id_sk', sqltype: sql.UniqueIdentifier, value: req.params.id_sk}
   ]
-  var query = "select isk.id as num, a.aspek as Aspek, a.komponen_aspek as Komponen, mi.nama as Indikator, isk.bobot as Bobot, isk.target as Target, isk.capaian as Capaian from indikator_satuankerja as isk, masterindikator as mi, aspek as a where a.id = mi.id_aspek and mi.id = isk.id_master and isk.id_satker = @id_sk";
+  var query = "select isk.id as num, a.aspek as Aspek, a.komponen_aspek as Komponen, mi.nama as Indikator, isk.bobot as Bobot, isk.target as Target, isk.capaian as Capaian from indikator_satuankerja as isk, masterindikator as mi, aspek as a where a.id = mi.id_aspek and mi.id = isk.id_master and ( isk.id_satker = @id_sk or isk.id_satker = (select id_sk from satuankerja where @id_sk = id_induk_satker))";
   
   executeQuery (res, query, column, 1);
 });
@@ -429,3 +429,4 @@ app.listen(port, hostname, function() {
   var message = "Server running on Port: " + port;
   console.log(message);
 })
+
